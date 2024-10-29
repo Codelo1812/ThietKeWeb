@@ -1,0 +1,700 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DBFILMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AdminUser">
+          <Key>
+            <PropertyRef Name="IdAdmin" />
+          </Key>
+          <Property Name="IdAdmin" Type="int" Nullable="false" />
+          <Property Name="NameUser" Type="nvarchar(max)" />
+          <Property Name="RoleUser" Type="nvarchar(max)" />
+          <Property Name="PasswordUser" Type="nchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BookingDetail">
+          <Key>
+            <PropertyRef Name="IdBookingDetail" />
+          </Key>
+          <Property Name="IdBookingDetail" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FilmID" Type="int" />
+          <Property Name="IdBooking" Type="int" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Price" Type="float" />
+          <Property Name="IdTicket" Type="int" />
+        </EntityType>
+        <EntityType Name="BookingFilm">
+          <Key>
+            <PropertyRef Name="IdBooking" />
+          </Key>
+          <Property Name="IdBooking" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DateOrder" Type="date" />
+          <Property Name="IdCus" Type="int" />
+          <Property Name="IdTicket" Type="int" />
+          <Property Name="Status" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Cinema">
+          <Key>
+            <PropertyRef Name="IdCinema" />
+          </Key>
+          <Property Name="IdCinema" Type="int" Nullable="false" />
+          <Property Name="CinemaName" Type="nvarchar(max)" />
+          <Property Name="Address" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="IdCus" />
+          </Key>
+          <Property Name="IdCus" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NameCus" Type="nvarchar(max)" />
+          <Property Name="PhoneCus" Type="nvarchar" MaxLength="15" />
+          <Property Name="EmailCus" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Film">
+          <Key>
+            <PropertyRef Name="FilmID" />
+          </Key>
+          <Property Name="FilmID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FilmName" Type="nvarchar(max)" />
+          <Property Name="FilmDecription" Type="nvarchar(max)" />
+          <Property Name="NameGenre" Type="nchar" MaxLength="20" />
+          <Property Name="Duration" Type="int" />
+          <Property Name="ImageFilm" Type="nvarchar(max)" />
+          <Property Name="ReleaseDate" Type="date" />
+        </EntityType>
+        <EntityType Name="FilmGenre">
+          <Key>
+            <PropertyRef Name="IdGenre" />
+          </Key>
+          <Property Name="FilmID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdGenre" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="NameGenre" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Room">
+          <Key>
+            <PropertyRef Name="IdRoom" />
+          </Key>
+          <Property Name="IdRoom" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCinema" Type="int" />
+          <Property Name="NameRoom" Type="nvarchar" MaxLength="255" />
+          <Property Name="Status" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Seat">
+          <Key>
+            <PropertyRef Name="IdSeat" />
+          </Key>
+          <Property Name="IdSeat" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdRoom" Type="int" />
+          <Property Name="SeatName" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="ShowTime">
+          <Key>
+            <PropertyRef Name="ShowtimeID" />
+          </Key>
+          <Property Name="ShowtimeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FilmID" Type="int" />
+          <Property Name="IdRoom" Type="int" />
+          <Property Name="IdTicket" Type="int" />
+          <Property Name="StartTime" Type="datetime" />
+          <Property Name="EndTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="IdTicket" />
+          </Key>
+          <Property Name="IdTicket" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShowtimeID" Type="int" />
+          <Property Name="UserEmail" Type="varchar" MaxLength="255" />
+          <Property Name="NumberOfTickets" Type="int" />
+          <Property Name="Price" Type="int" />
+        </EntityType>
+        <Association Name="FK_BookingDetail_BookingFilm">
+          <End Role="BookingFilm" Type="Self.BookingFilm" Multiplicity="0..1" />
+          <End Role="BookingDetail" Type="Self.BookingDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BookingFilm">
+              <PropertyRef Name="IdBooking" />
+            </Principal>
+            <Dependent Role="BookingDetail">
+              <PropertyRef Name="IdBooking" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BookingFilm_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="BookingFilm" Type="Self.BookingFilm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="IdCus" />
+            </Principal>
+            <Dependent Role="BookingFilm">
+              <PropertyRef Name="IdCus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BookingFilm_Ticket">
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="0..1" />
+          <End Role="BookingFilm" Type="Self.BookingFilm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ticket">
+              <PropertyRef Name="IdTicket" />
+            </Principal>
+            <Dependent Role="BookingFilm">
+              <PropertyRef Name="IdTicket" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FilmGenre_Film">
+          <End Role="Film" Type="Self.Film" Multiplicity="1" />
+          <End Role="FilmGenre" Type="Self.FilmGenre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Film">
+              <PropertyRef Name="FilmID" />
+            </Principal>
+            <Dependent Role="FilmGenre">
+              <PropertyRef Name="FilmID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Room_Cinema">
+          <End Role="Cinema" Type="Self.Cinema" Multiplicity="0..1" />
+          <End Role="Room" Type="Self.Room" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cinema">
+              <PropertyRef Name="IdCinema" />
+            </Principal>
+            <Dependent Role="Room">
+              <PropertyRef Name="IdCinema" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Seat_Room">
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
+          <End Role="Seat" Type="Self.Seat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room">
+              <PropertyRef Name="IdRoom" />
+            </Principal>
+            <Dependent Role="Seat">
+              <PropertyRef Name="IdRoom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShowTime_Film">
+          <End Role="Film" Type="Self.Film" Multiplicity="0..1" />
+          <End Role="ShowTime" Type="Self.ShowTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Film">
+              <PropertyRef Name="FilmID" />
+            </Principal>
+            <Dependent Role="ShowTime">
+              <PropertyRef Name="FilmID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShowTime_Room">
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
+          <End Role="ShowTime" Type="Self.ShowTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room">
+              <PropertyRef Name="IdRoom" />
+            </Principal>
+            <Dependent Role="ShowTime">
+              <PropertyRef Name="IdRoom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShowTime_Ticket">
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="0..1" />
+          <End Role="ShowTime" Type="Self.ShowTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ticket">
+              <PropertyRef Name="IdTicket" />
+            </Principal>
+            <Dependent Role="ShowTime">
+              <PropertyRef Name="IdTicket" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBFILMModelStoreContainer">
+          <EntitySet Name="AdminUser" EntityType="Self.AdminUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BookingDetail" EntityType="Self.BookingDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BookingFilm" EntityType="Self.BookingFilm" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cinema" EntityType="Self.Cinema" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Film" EntityType="Self.Film" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FilmGenre" EntityType="Self.FilmGenre" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Room" EntityType="Self.Room" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Seat" EntityType="Self.Seat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShowTime" EntityType="Self.ShowTime" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_BookingDetail_BookingFilm" Association="Self.FK_BookingDetail_BookingFilm">
+            <End Role="BookingFilm" EntitySet="BookingFilm" />
+            <End Role="BookingDetail" EntitySet="BookingDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BookingFilm_Customer" Association="Self.FK_BookingFilm_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="BookingFilm" EntitySet="BookingFilm" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BookingFilm_Ticket" Association="Self.FK_BookingFilm_Ticket">
+            <End Role="Ticket" EntitySet="Ticket" />
+            <End Role="BookingFilm" EntitySet="BookingFilm" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FilmGenre_Film" Association="Self.FK_FilmGenre_Film">
+            <End Role="Film" EntitySet="Film" />
+            <End Role="FilmGenre" EntitySet="FilmGenre" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Room_Cinema" Association="Self.FK_Room_Cinema">
+            <End Role="Cinema" EntitySet="Cinema" />
+            <End Role="Room" EntitySet="Room" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Seat_Room" Association="Self.FK_Seat_Room">
+            <End Role="Room" EntitySet="Room" />
+            <End Role="Seat" EntitySet="Seat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShowTime_Film" Association="Self.FK_ShowTime_Film">
+            <End Role="Film" EntitySet="Film" />
+            <End Role="ShowTime" EntitySet="ShowTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShowTime_Room" Association="Self.FK_ShowTime_Room">
+            <End Role="Room" EntitySet="Room" />
+            <End Role="ShowTime" EntitySet="ShowTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShowTime_Ticket" Association="Self.FK_ShowTime_Ticket">
+            <End Role="Ticket" EntitySet="Ticket" />
+            <End Role="ShowTime" EntitySet="ShowTime" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBFILMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AdminUser">
+          <Key>
+            <PropertyRef Name="IdAdmin" />
+          </Key>
+          <Property Name="IdAdmin" Type="Int32" Nullable="false" />
+          <Property Name="NameUser" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RoleUser" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordUser" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BookingDetail">
+          <Key>
+            <PropertyRef Name="IdBookingDetail" />
+          </Key>
+          <Property Name="IdBookingDetail" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FilmID" Type="Int32" />
+          <Property Name="IdBooking" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="IdTicket" Type="Int32" />
+          <NavigationProperty Name="BookingFilm" Relationship="Self.FK_BookingDetail_BookingFilm" FromRole="BookingDetail" ToRole="BookingFilm" />
+        </EntityType>
+        <EntityType Name="BookingFilm">
+          <Key>
+            <PropertyRef Name="IdBooking" />
+          </Key>
+          <Property Name="IdBooking" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateOrder" Type="DateTime" Precision="0" />
+          <Property Name="IdCus" Type="Int32" />
+          <Property Name="IdTicket" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BookingDetails" Relationship="Self.FK_BookingDetail_BookingFilm" FromRole="BookingFilm" ToRole="BookingDetail" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_BookingFilm_Customer" FromRole="BookingFilm" ToRole="Customer" />
+          <NavigationProperty Name="Ticket" Relationship="Self.FK_BookingFilm_Ticket" FromRole="BookingFilm" ToRole="Ticket" />
+        </EntityType>
+        <EntityType Name="Cinema">
+          <Key>
+            <PropertyRef Name="IdCinema" />
+          </Key>
+          <Property Name="IdCinema" Type="Int32" Nullable="false" />
+          <Property Name="CinemaName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Rooms" Relationship="Self.FK_Room_Cinema" FromRole="Cinema" ToRole="Room" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="IdCus" />
+          </Key>
+          <Property Name="IdCus" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameCus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneCus" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="EmailCus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BookingFilms" Relationship="Self.FK_BookingFilm_Customer" FromRole="Customer" ToRole="BookingFilm" />
+        </EntityType>
+        <EntityType Name="Film">
+          <Key>
+            <PropertyRef Name="FilmID" />
+          </Key>
+          <Property Name="FilmID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FilmName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FilmDecription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NameGenre" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="Duration" Type="Int32" />
+          <Property Name="ImageFilm" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ReleaseDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="FilmGenres" Relationship="Self.FK_FilmGenre_Film" FromRole="Film" ToRole="FilmGenre" />
+          <NavigationProperty Name="ShowTimes" Relationship="Self.FK_ShowTime_Film" FromRole="Film" ToRole="ShowTime" />
+        </EntityType>
+        <EntityType Name="FilmGenre">
+          <Key>
+            <PropertyRef Name="IdGenre" />
+          </Key>
+          <Property Name="FilmID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdGenre" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="NameGenre" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Film" Relationship="Self.FK_FilmGenre_Film" FromRole="FilmGenre" ToRole="Film" />
+        </EntityType>
+        <EntityType Name="Room">
+          <Key>
+            <PropertyRef Name="IdRoom" />
+          </Key>
+          <Property Name="IdRoom" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCinema" Type="Int32" />
+          <Property Name="NameRoom" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Cinema" Relationship="Self.FK_Room_Cinema" FromRole="Room" ToRole="Cinema" />
+          <NavigationProperty Name="Seats" Relationship="Self.FK_Seat_Room" FromRole="Room" ToRole="Seat" />
+          <NavigationProperty Name="ShowTimes" Relationship="Self.FK_ShowTime_Room" FromRole="Room" ToRole="ShowTime" />
+        </EntityType>
+        <EntityType Name="Seat">
+          <Key>
+            <PropertyRef Name="IdSeat" />
+          </Key>
+          <Property Name="IdSeat" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdRoom" Type="Int32" />
+          <Property Name="SeatName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Room" Relationship="Self.FK_Seat_Room" FromRole="Seat" ToRole="Room" />
+        </EntityType>
+        <EntityType Name="ShowTime">
+          <Key>
+            <PropertyRef Name="ShowtimeID" />
+          </Key>
+          <Property Name="ShowtimeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FilmID" Type="Int32" />
+          <Property Name="IdRoom" Type="Int32" />
+          <Property Name="IdTicket" Type="Int32" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Film" Relationship="Self.FK_ShowTime_Film" FromRole="ShowTime" ToRole="Film" />
+          <NavigationProperty Name="Room" Relationship="Self.FK_ShowTime_Room" FromRole="ShowTime" ToRole="Room" />
+          <NavigationProperty Name="Ticket" Relationship="Self.FK_ShowTime_Ticket" FromRole="ShowTime" ToRole="Ticket" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="IdTicket" />
+          </Key>
+          <Property Name="IdTicket" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShowtimeID" Type="Int32" />
+          <Property Name="UserEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="NumberOfTickets" Type="Int32" />
+          <Property Name="Price" Type="Int32" />
+          <NavigationProperty Name="BookingFilms" Relationship="Self.FK_BookingFilm_Ticket" FromRole="Ticket" ToRole="BookingFilm" />
+          <NavigationProperty Name="ShowTimes" Relationship="Self.FK_ShowTime_Ticket" FromRole="Ticket" ToRole="ShowTime" />
+        </EntityType>
+        <Association Name="FK_BookingDetail_BookingFilm">
+          <End Role="BookingFilm" Type="Self.BookingFilm" Multiplicity="0..1" />
+          <End Role="BookingDetail" Type="Self.BookingDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BookingFilm">
+              <PropertyRef Name="IdBooking" />
+            </Principal>
+            <Dependent Role="BookingDetail">
+              <PropertyRef Name="IdBooking" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BookingFilm_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="BookingFilm" Type="Self.BookingFilm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="IdCus" />
+            </Principal>
+            <Dependent Role="BookingFilm">
+              <PropertyRef Name="IdCus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BookingFilm_Ticket">
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="0..1" />
+          <End Role="BookingFilm" Type="Self.BookingFilm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ticket">
+              <PropertyRef Name="IdTicket" />
+            </Principal>
+            <Dependent Role="BookingFilm">
+              <PropertyRef Name="IdTicket" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Room_Cinema">
+          <End Role="Cinema" Type="Self.Cinema" Multiplicity="0..1" />
+          <End Role="Room" Type="Self.Room" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cinema">
+              <PropertyRef Name="IdCinema" />
+            </Principal>
+            <Dependent Role="Room">
+              <PropertyRef Name="IdCinema" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FilmGenre_Film">
+          <End Role="Film" Type="Self.Film" Multiplicity="1" />
+          <End Role="FilmGenre" Type="Self.FilmGenre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Film">
+              <PropertyRef Name="FilmID" />
+            </Principal>
+            <Dependent Role="FilmGenre">
+              <PropertyRef Name="FilmID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShowTime_Film">
+          <End Role="Film" Type="Self.Film" Multiplicity="0..1" />
+          <End Role="ShowTime" Type="Self.ShowTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Film">
+              <PropertyRef Name="FilmID" />
+            </Principal>
+            <Dependent Role="ShowTime">
+              <PropertyRef Name="FilmID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Seat_Room">
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
+          <End Role="Seat" Type="Self.Seat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room">
+              <PropertyRef Name="IdRoom" />
+            </Principal>
+            <Dependent Role="Seat">
+              <PropertyRef Name="IdRoom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShowTime_Room">
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
+          <End Role="ShowTime" Type="Self.ShowTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room">
+              <PropertyRef Name="IdRoom" />
+            </Principal>
+            <Dependent Role="ShowTime">
+              <PropertyRef Name="IdRoom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShowTime_Ticket">
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="0..1" />
+          <End Role="ShowTime" Type="Self.ShowTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ticket">
+              <PropertyRef Name="IdTicket" />
+            </Principal>
+            <Dependent Role="ShowTime">
+              <PropertyRef Name="IdTicket" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBFILMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AdminUsers" EntityType="Self.AdminUser" />
+          <EntitySet Name="BookingDetails" EntityType="Self.BookingDetail" />
+          <EntitySet Name="BookingFilms" EntityType="Self.BookingFilm" />
+          <EntitySet Name="Cinemas" EntityType="Self.Cinema" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Films" EntityType="Self.Film" />
+          <EntitySet Name="FilmGenres" EntityType="Self.FilmGenre" />
+          <EntitySet Name="Rooms" EntityType="Self.Room" />
+          <EntitySet Name="Seats" EntityType="Self.Seat" />
+          <EntitySet Name="ShowTimes" EntityType="Self.ShowTime" />
+          <EntitySet Name="Tickets" EntityType="Self.Ticket" />
+          <AssociationSet Name="FK_BookingDetail_BookingFilm" Association="Self.FK_BookingDetail_BookingFilm">
+            <End Role="BookingFilm" EntitySet="BookingFilms" />
+            <End Role="BookingDetail" EntitySet="BookingDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BookingFilm_Customer" Association="Self.FK_BookingFilm_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="BookingFilm" EntitySet="BookingFilms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BookingFilm_Ticket" Association="Self.FK_BookingFilm_Ticket">
+            <End Role="Ticket" EntitySet="Tickets" />
+            <End Role="BookingFilm" EntitySet="BookingFilms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Room_Cinema" Association="Self.FK_Room_Cinema">
+            <End Role="Cinema" EntitySet="Cinemas" />
+            <End Role="Room" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FilmGenre_Film" Association="Self.FK_FilmGenre_Film">
+            <End Role="Film" EntitySet="Films" />
+            <End Role="FilmGenre" EntitySet="FilmGenres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShowTime_Film" Association="Self.FK_ShowTime_Film">
+            <End Role="Film" EntitySet="Films" />
+            <End Role="ShowTime" EntitySet="ShowTimes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Seat_Room" Association="Self.FK_Seat_Room">
+            <End Role="Room" EntitySet="Rooms" />
+            <End Role="Seat" EntitySet="Seats" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShowTime_Room" Association="Self.FK_ShowTime_Room">
+            <End Role="Room" EntitySet="Rooms" />
+            <End Role="ShowTime" EntitySet="ShowTimes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShowTime_Ticket" Association="Self.FK_ShowTime_Ticket">
+            <End Role="Ticket" EntitySet="Tickets" />
+            <End Role="ShowTime" EntitySet="ShowTimes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBFILMModelStoreContainer" CdmEntityContainer="DBFILMEntities">
+          <EntitySetMapping Name="AdminUsers">
+            <EntityTypeMapping TypeName="DBFILMModel.AdminUser">
+              <MappingFragment StoreEntitySet="AdminUser">
+                <ScalarProperty Name="IdAdmin" ColumnName="IdAdmin" />
+                <ScalarProperty Name="NameUser" ColumnName="NameUser" />
+                <ScalarProperty Name="RoleUser" ColumnName="RoleUser" />
+                <ScalarProperty Name="PasswordUser" ColumnName="PasswordUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BookingDetails">
+            <EntityTypeMapping TypeName="DBFILMModel.BookingDetail">
+              <MappingFragment StoreEntitySet="BookingDetail">
+                <ScalarProperty Name="IdBookingDetail" ColumnName="IdBookingDetail" />
+                <ScalarProperty Name="FilmID" ColumnName="FilmID" />
+                <ScalarProperty Name="IdBooking" ColumnName="IdBooking" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="IdTicket" ColumnName="IdTicket" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BookingFilms">
+            <EntityTypeMapping TypeName="DBFILMModel.BookingFilm">
+              <MappingFragment StoreEntitySet="BookingFilm">
+                <ScalarProperty Name="IdBooking" ColumnName="IdBooking" />
+                <ScalarProperty Name="DateOrder" ColumnName="DateOrder" />
+                <ScalarProperty Name="IdCus" ColumnName="IdCus" />
+                <ScalarProperty Name="IdTicket" ColumnName="IdTicket" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cinemas">
+            <EntityTypeMapping TypeName="DBFILMModel.Cinema">
+              <MappingFragment StoreEntitySet="Cinema">
+                <ScalarProperty Name="IdCinema" ColumnName="IdCinema" />
+                <ScalarProperty Name="CinemaName" ColumnName="CinemaName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="DBFILMModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="IdCus" ColumnName="IdCus" />
+                <ScalarProperty Name="NameCus" ColumnName="NameCus" />
+                <ScalarProperty Name="PhoneCus" ColumnName="PhoneCus" />
+                <ScalarProperty Name="EmailCus" ColumnName="EmailCus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Films">
+            <EntityTypeMapping TypeName="DBFILMModel.Film">
+              <MappingFragment StoreEntitySet="Film">
+                <ScalarProperty Name="FilmID" ColumnName="FilmID" />
+                <ScalarProperty Name="FilmName" ColumnName="FilmName" />
+                <ScalarProperty Name="FilmDecription" ColumnName="FilmDecription" />
+                <ScalarProperty Name="NameGenre" ColumnName="NameGenre" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="ImageFilm" ColumnName="ImageFilm" />
+                <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FilmGenres">
+            <EntityTypeMapping TypeName="DBFILMModel.FilmGenre">
+              <MappingFragment StoreEntitySet="FilmGenre">
+                <ScalarProperty Name="FilmID" ColumnName="FilmID" />
+                <ScalarProperty Name="IdGenre" ColumnName="IdGenre" />
+                <ScalarProperty Name="NameGenre" ColumnName="NameGenre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rooms">
+            <EntityTypeMapping TypeName="DBFILMModel.Room">
+              <MappingFragment StoreEntitySet="Room">
+                <ScalarProperty Name="IdRoom" ColumnName="IdRoom" />
+                <ScalarProperty Name="IdCinema" ColumnName="IdCinema" />
+                <ScalarProperty Name="NameRoom" ColumnName="NameRoom" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seats">
+            <EntityTypeMapping TypeName="DBFILMModel.Seat">
+              <MappingFragment StoreEntitySet="Seat">
+                <ScalarProperty Name="IdSeat" ColumnName="IdSeat" />
+                <ScalarProperty Name="IdRoom" ColumnName="IdRoom" />
+                <ScalarProperty Name="SeatName" ColumnName="SeatName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShowTimes">
+            <EntityTypeMapping TypeName="DBFILMModel.ShowTime">
+              <MappingFragment StoreEntitySet="ShowTime">
+                <ScalarProperty Name="ShowtimeID" ColumnName="ShowtimeID" />
+                <ScalarProperty Name="FilmID" ColumnName="FilmID" />
+                <ScalarProperty Name="IdRoom" ColumnName="IdRoom" />
+                <ScalarProperty Name="IdTicket" ColumnName="IdTicket" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tickets">
+            <EntityTypeMapping TypeName="DBFILMModel.Ticket">
+              <MappingFragment StoreEntitySet="Ticket">
+                <ScalarProperty Name="IdTicket" ColumnName="IdTicket" />
+                <ScalarProperty Name="ShowtimeID" ColumnName="ShowtimeID" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="NumberOfTickets" ColumnName="NumberOfTickets" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
